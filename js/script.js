@@ -91,7 +91,7 @@ GPXRequest = function()
 	
 	// Set callback
 	xhr.setCallback(function (xmlData) {
-		var gpx = new SMap.Layer.GPX(xmlData, null, { maxPoints:5000, colors:["rgba(0, 76, 140, 0.75)"] });
+		var gpx = new SMap.Layer.GPX(xmlData, null, { maxPoints:5000, colors:["rgba(255, 0, 0, 0.75)"] });
 		map.addLayer(gpx);
 		// Hide loader
 		JAK.DOM.addClass(JAK.gel("loader"), "hidden");

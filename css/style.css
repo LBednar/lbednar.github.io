@@ -48,3 +48,9 @@ h1 {
 		-1px 1px 0 #fff,
 		1px 1px 0 #fff;
 }
+
+polyline {
+	stroke-linecap: square;
+	stroke-width: 5px;
+	stroke-dasharray: 10px 10px;
+}

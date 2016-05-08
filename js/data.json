@@ -1,9 +1,30 @@
 [
 	{
-		"Name": "Sadová 110, Želešice",
+		"Title": "Sadová 110, Želešice",
 		"Coord": "49.1181411N, 16.5774847E",
-		"Alt": "Test",
+		"Icon": "http://api4.mapy.cz/img/api/marker/drop-red.png",
 		"Header": "Header",
-		"Body", "Body"
+		"Body": "Body"
+	},
+	{
+		"Title": "Železniční viadukt",
+		"Coord": "49°8'46.615\"N, 16°27'56.190\"E",
+		"Icon": "http://api4.mapy.cz/img/api/marker/drop-blue.png",
+		"Header": "",
+		"Body": ""
+	},
+	{
+		"Title": "Kamenný most Spálený Mlýn",
+		"Coord": "49°7'51.077\"N, 16°30'27.585\"E",
+		"Icon": "http://api4.mapy.cz/img/api/marker/drop-red.png",
+		"Header": "",
+		"Body": ""
+	},
+	{
+		"Title": "Přírodní park Bobrava",
+		"Coord": "49°7'54.214\"N, 16°31'6.856\"E",
+		"Icon": "http://api4.mapy.cz/img/api/marker/drop-blue.png",
+		"Header": "",
+		"Body": ""
 	}
 ]

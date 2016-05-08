@@ -5,7 +5,7 @@ var listener = {};
 // Load map
 LoadMap = function()
 {
-	// If hide whole map - hide here
+	// If want to hide whole map
 	//JAK.DOM.addClass(JAK.gel("map"), "hidden");
 
 	var center = SMap.Coords.fromWGS84(16.5460277,49.1489653);
@@ -44,6 +44,7 @@ AddControls = function()
 	var zoom = new SMap.Control.Zoom(null, { titles: ["Přiblížit", "Oddálit"], showZoomMenu:false });
 	map.addControl(zoom, { right: "2px", top: "10x" });
 	var lnt = "Editovat na mapy.cz";
+	// Add proper link to map on MAPY.CZ
 	var lnd = JAK.mel("a", { className: "mapycz-link", href: "https://mapy.cz/s/taGG", target: "_blank", innerHTML: lnt });
 	map.getContainer().appendChild(lnd);
 };
@@ -60,7 +61,7 @@ EventHandler = function(e)
 		// Get GPX
 		GPXRequest();
 	}				
-}
+};
 
 // GPX request
 GPXRequest = function()
@@ -69,63 +70,76 @@ GPXRequest = function()
 	var xhr = new JAK.Request(JAK.Request.XML);
 	
 	// Set callback
-	xhr.setCallback(function (xmlDoc) {
-		var gpx = new SMap.Layer.GPX(xmlDoc, null, { maxPoints:5000, colors:["rgba(0, 76, 140, 0.75)"] });
+	xhr.setCallback(function (xmlData) {
+		var gpx = new SMap.Layer.GPX(xmlData, null, { maxPoints:5000, colors:["rgba(0, 76, 140, 0.75)"] });
 		map.addLayer(gpx);
 		// Hide loader
 		JAK.DOM.addClass(JAK.gel("loader"), "hidden");
-		JAK.DOM.removeClass(JAK.gel("map"), "hidden");
+		// If you want to unhide whole map
+		//JAK.DOM.removeClass(JAK.gel("map"), "hidden");
 		gpx.enable();
 		gpx.fit();
+
 		console.log(gpx);
+		
+		// Markers and Cards
 		DataRequest();
 	});
 	
 	// Send request
 	xhr.send("routes/route.gpx");
-}
+};
 
-DataRequest = function() {
-	var obrazek = "http://api4.mapy.cz/img/api/marker/drop-red.png";
+// Markers and Cards loader
+DataRequest = function()
+{
+	// Create AJAX request
+	var xhr = new JAK.Request(JAK.Request.TEXT);
 
-	var data = [
-					{
-						"Name": "Sadová 110, Želešice",
-						"Coord": "49.1181411N, 16.5774847E",
-						"Alt": "Test",
-						"Header": "Header",
-						"Body": "Body"
-					}
-				];
-	var znacky = [];
-	var souradnice = [];
+	// Set callback
+	xhr.setCallback(function (jsonData)
+	{
+		var data = JSON.parse(jsonData);
 
-	for (var obj in data) {
-		var c = SMap.Coords.fromWGS84(data[obj].Coord); /* Souřadnice značky, z textového formátu souřadnic */
-		var options = {
-			url:obrazek,
-			title:data[obj].Name,
-			anchor: {left:10, bottom: 1}  /* Ukotvení značky za bod uprostřed dole */
+		var markers = [];
+
+		for (var i = 0; i < data.length; i++) {
+			// Get object
+			var obj = data[i];
+			
+			var c = SMap.Coords.fromWGS84(obj.Coord);
+			var options = {
+				url: obj.Icon,
+				title: obj.Title,
+				anchor: { left: 11, bottom: 11 }
+			}
+			
+			var marker = new SMap.Marker(c, null, options);
+					
+			// Card
+			var card = new SMap.Card();
+			// Header
+			card.getHeader().innerHTML = obj.Header;
+			// Body
+			card.getBody().innerHTML = obj.Body;
+
+			// Add card to marker
+			marker.decorate(SMap.Marker.Feature.Card, card);
+			
+			markers.push(marker);
 		}
 		
-		var znacka = new SMap.Marker(c, null, options);
-				
-		var card = new SMap.Card();
-		card.getHeader().innerHTML = data[obj].Header;
-		card.getBody().innerHTML = data[obj].Body;
-
-		znacka.decorate(SMap.Marker.Feature.Card, card);
+		var markerLayer = new SMap.Layer.Marker();
+		map.addLayer(markerLayer);                
+		markerLayer.enable();                     
 		
-		souradnice.push(c);
-		znacky.push(znacka);
-	}
-	
-	var vrstva = new SMap.Layer.Marker();
-	map.addLayer(vrstva);                
-	vrstva.enable();                     
-	for (var i=0;i<znacky.length;i++) {
-		vrstva.addMarker(znacky[i]);
-	}	
+		for (var j = 0; j < markers.length; j++) {
+			markerLayer.addMarker(markers[j]);
+		}	
+	});
+
+	// Send request
+	xhr.send("js/data.json");
 };
 
 // Asynchronnous map load

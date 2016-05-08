@@ -109,16 +109,23 @@ DataRequest = function() {
 		}
 		
 		var znacka = new SMap.Marker(c, null, options);
+				
+		var card = new SMap.Card();
+		card.getHeader().innerHTML = data[obj].Header;
+		card.getBody().innerHTML = data[obj].Body;
+
+		znacka.decorate(SMap.Marker.Feature.Card, card);
+		
 		souradnice.push(c);
 		znacky.push(znacka);
 	}
 	
-	var vrstva = new SMap.Layer.Marker();     /* Vrstva se značkami */
-	map.addLayer(vrstva);                          /* Přidat ji do mapy */
-	vrstva.enable();                         /* A povolit */
+	var vrstva = new SMap.Layer.Marker();
+	map.addLayer(vrstva);                
+	vrstva.enable();                     
 	for (var i=0;i<znacky.length;i++) {
 		vrstva.addMarker(znacky[i]);
-	}
+	}	
 };
 
 // Asynchronnous map load

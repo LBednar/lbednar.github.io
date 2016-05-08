@@ -81,7 +81,7 @@ GPXRequest = function()
 	});
 	
 	// Send request
-	xhr.send("route.gpx");
+	xhr.send("routes/route.gpx");
 }
 
 // Asynchronnous map load

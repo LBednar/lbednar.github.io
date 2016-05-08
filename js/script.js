@@ -1,6 +1,7 @@
 // Variables
 var map = {};
 var listener = {};
+var data = [];
 
 // Load map
 LoadMap = function()
@@ -13,7 +14,7 @@ LoadMap = function()
 	map.addDefaultLayer(SMap.DEF_TURIST).setTrail(true).setBike(true).enable();
 					
 	// Add listener
-	listener = map.getSignals().addListener(window, "*", EventHandler);
+	listener = map.getSignals().addListener(window, "tileset-load", EventHandler);
 
 	// POI
 	var poi = new SMap.Layer.Marker();
@@ -55,12 +56,31 @@ EventHandler = function(e)
 	if (e.type == "tileset-load")
 	{
 		// Remove listener
-		map.getSignals().removeListener(listener);					
+		map.getSignals().removeListener(listener);
+		
+		listener = map.getSignals().addListener(window, "card-open", EventHandler);
+		
 		// Show loader
 		JAK.DOM.removeClass(JAK.gel("loader"), "hidden");
 		// Get GPX
 		GPXRequest();
-	}				
+	}
+	
+	if (e.type == "card-open")
+	{
+		var obj = e.target;
+		var objHId = obj.getHeader().innerHTML;
+		var objBId = obj.getBody().innerHTML;
+
+		if ((typeof parseInt(objHId) === 'number') && objHId == objBId)
+		{
+			var objData = data[objHId];
+
+			// Load data on demand
+			obj.getHeader().innerHTML = objData.Header;
+			obj.getBody().innerHTML = objData.Body;
+		}
+	}
 };
 
 // GPX request
@@ -80,8 +100,6 @@ GPXRequest = function()
 		gpx.enable();
 		gpx.fit();
 
-		console.log(gpx);
-		
 		// Markers and Cards
 		DataRequest();
 	});
@@ -99,7 +117,7 @@ DataRequest = function()
 	// Set callback
 	xhr.setCallback(function (jsonData)
 	{
-		var data = JSON.parse(jsonData);
+		data = JSON.parse(jsonData);
 
 		var markers = [];
 
@@ -119,9 +137,9 @@ DataRequest = function()
 			// Card
 			var card = new SMap.Card();
 			// Header
-			card.getHeader().innerHTML = obj.Header;
+			card.getHeader().innerHTML = i;
 			// Body
-			card.getBody().innerHTML = obj.Body;
+			card.getBody().innerHTML = i;
 
 			// Add card to marker
 			marker.decorate(SMap.Marker.Feature.Card, card);

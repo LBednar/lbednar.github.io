@@ -78,11 +78,48 @@ GPXRequest = function()
 		gpx.enable();
 		gpx.fit();
 		console.log(gpx);
+		DataRequest();
 	});
 	
 	// Send request
 	xhr.send("routes/route.gpx");
 }
+
+DataRequest = function() {
+	var obrazek = "http://api4.mapy.cz/img/api/marker/drop-red.png";
+
+	var data = [
+					{
+						"Name": "Sadová 110, Želešice",
+						"Coord": "49.1181411N, 16.5774847E",
+						"Alt": "Test",
+						"Header": "Header",
+						"Body": "Body"
+					}
+				];
+	var znacky = [];
+	var souradnice = [];
+
+	for (var obj in data) {
+		var c = SMap.Coords.fromWGS84(data[obj].Coord); /* Souřadnice značky, z textového formátu souřadnic */
+		var options = {
+			url:obrazek,
+			title:data[obj].Name,
+			anchor: {left:10, bottom: 1}  /* Ukotvení značky za bod uprostřed dole */
+		}
+		
+		var znacka = new SMap.Marker(c, null, options);
+		souradnice.push(c);
+		znacky.push(znacka);
+	}
+	
+	var vrstva = new SMap.Layer.Marker();     /* Vrstva se značkami */
+	map.addLayer(vrstva);                          /* Přidat ji do mapy */
+	vrstva.enable();                         /* A povolit */
+	for (var i=0;i<znacky.length;i++) {
+		vrstva.addMarker(znacky[i]);
+	}
+};
 
 // Asynchronnous map load
 Loader.async = true;

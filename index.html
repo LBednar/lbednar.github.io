@@ -11,10 +11,13 @@
 			// Load map
 			LoadMap = function()
 			{
-				var center = SMap.Coords.fromWGS84(16.718412481896962, 49.24333835062351);
-				map = new SMap(JAK.gel("map"), center, 13);
+				// If hide whole map - hide here
+				//JAK.DOM.addClass(JAK.gel("map"), "hidden");
+			
+				var center = SMap.Coords.fromWGS84(16.5460277,49.1489653);
+				map = new SMap(JAK.gel("map"), center, 12);
 				map.addDefaultLayer(SMap.DEF_TURIST).setTrail(true).setBike(true).enable();
-				
+								
 				// Add listener
 				listener = map.getSignals().addListener(window, "*", EventHandler);
 
@@ -57,7 +60,9 @@
 				if (e.type == "tileset-load")
 				{
 					// Remove listener
-					map.getSignals().removeListener(listener);
+					map.getSignals().removeListener(listener);					
+					// Show loader
+					JAK.DOM.removeClass(JAK.gel("loader"), "hidden");
 					// Get GPX
 					GPXRequest();
 				}				
@@ -71,16 +76,20 @@
 				
 				// Set callback
 				xhr.setCallback(function (xmlDoc) {
-					var gpx = new SMap.Layer.GPX(xmlDoc, null, { maxPoints:5000, colors:["#ff0000"] });
+					var gpx = new SMap.Layer.GPX(xmlDoc, null, { maxPoints:5000, colors:["rgba(0, 76, 140, 0.75)"] });
 					map.addLayer(gpx);
+					// Hide loader
+					JAK.DOM.addClass(JAK.gel("loader"), "hidden");
+					JAK.DOM.removeClass(JAK.gel("map"), "hidden");
 					gpx.enable();
 					gpx.fit();
+					console.log(gpx);
 				});
 				
 				// Send request
 				xhr.send("route.gpx");
 			}
-
+			
 			// Asynchronnous map load
 			Loader.async = true;
 			Loader.load(null, { poi:true }, LoadMap);
@@ -100,9 +109,48 @@
 				box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
 				color: #6b7580;
 			}
+						
+			.hidden {
+				visibility: hidden;
+			}
+			
+			.modalDialog {
+				position: fixed;
+				font-family: Arial, Helvetica, sans-serif;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				z-index: 99999;
+				opacity:1;
+			}
+			.modalDialog > div {
+				width: 400px;
+				position: relative;
+				margin: 20% auto;
+			}
+			
+			h1 {
+				text-align: center;
+				-webkit-text-stroke: 1px white;
+				color: black;
+				text-shadow:
+					3px 3px 0 #fff,
+					-1px -1px 0 #fff,  
+					1px -1px 0 #fff,
+					-1px 1px 0 #fff,
+					1px 1px 0 #fff;
+			}
 		</style>
 	</head>
 	<body>
-		<div id="map" style="width:90%; height:90%"></div>
+		<div>
+			<div id="map" style="width:90%; height: 90%;"></div>
+			<div id="loader" style="width:90%; height: 90%;" class="hidden modalDialog">
+				<div>
+					<h1>Loading route ... </h1>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

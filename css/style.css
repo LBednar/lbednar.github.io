@@ -52,5 +52,8 @@ h1 {
 polyline {
 	stroke-linecap: square;
 	stroke-width: 5px;
+}
+
+.zoomed polyline {
 	stroke-dasharray: 10px 10px;
 }

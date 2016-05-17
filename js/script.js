@@ -2,14 +2,13 @@
 var map = {};
 var listener = {};
 var data = [];
+var config = {};
+var gpxId = null;
 
 // Load map
 LoadMap = function()
 {
-	// If want to hide whole map
-	//JAK.DOM.addClass(JAK.gel("map"), "hidden");
-
-	var center = SMap.Coords.fromWGS84(16.5460277,49.1489653);
+	var center = SMap.Coords.fromWGS84(16.5460277, 49.1489653);
 	map = new SMap(JAK.gel("map"), center, 12);
 	map.addDefaultLayer(SMap.DEF_TURIST).setTrail(true).setBike(true).enable();
 					
@@ -58,7 +57,7 @@ EventHandler = function(e)
 		// Remove listener
 		map.getSignals().removeListener(listener);
 		
-		listener = map.getSignals().addListener(window, "card-open", EventHandler);
+		listener = map.getSignals().addListener(window, "card-open, zoom-stop", EventHandler);
 		
 		// Show loader
 		JAK.DOM.removeClass(JAK.gel("loader"), "hidden");
@@ -81,6 +80,20 @@ EventHandler = function(e)
 			obj.getBody().innerHTML = objData.Body;
 		}
 	}
+	
+	if (e.type == "zoom-stop")
+	{
+		var el = document.getElementsByTagName("g")[0];
+		
+		if (map._zoom > 12)
+		{
+			JAK.DOM.addClass(el, 'zoomed');
+		}
+		else
+		{
+			JAK.DOM.removeClass(el, 'zoomed');
+		}
+	}
 };
 
 // GPX request
@@ -91,7 +104,10 @@ GPXRequest = function()
 	
 	// Set callback
 	xhr.setCallback(function (xmlData) {
-		var gpx = new SMap.Layer.GPX(xmlData, null, { maxPoints:5000, colors:["rgba(255, 0, 0, 0.75)"] });
+		var gpx = new SMap.Layer.GPX(xmlData, null, { maxPoints:5000, colors:["rgba(255, 0, 0, 0.75)", "rgba(0, 255, 0, 0.75)"] });
+		// Store information about gpx ID
+		gpxId = gpx._id;
+		
 		map.addLayer(gpx);
 		// Hide loader
 		JAK.DOM.addClass(JAK.gel("loader"), "hidden");

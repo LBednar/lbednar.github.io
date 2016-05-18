@@ -2,8 +2,6 @@
 var map = {};
 var listener = {};
 var data = [];
-var config = {};
-var gpxId = null;
 
 // Load map
 LoadMap = function()
@@ -57,7 +55,9 @@ EventHandler = function(e)
 		// Remove listener
 		map.getSignals().removeListener(listener);
 		
-		listener = map.getSignals().addListener(window, "card-open, zoom-stop", EventHandler);
+		listener = map.getSignals().addListener(window, "card-open", EventHandler);
+		listener = map.getSignals().addListener(window, "map-redraw", EventHandler);
+		listener = map.getSignals().addListener(window, "zoom-stop", EventHandler);
 		
 		// Show loader
 		JAK.DOM.removeClass(JAK.gel("loader"), "hidden");
@@ -83,16 +83,22 @@ EventHandler = function(e)
 	
 	if (e.type == "zoom-stop")
 	{
-		var el = document.getElementsByTagName("g")[0];
-		
 		if (map._zoom > 12)
 		{
-			JAK.DOM.addClass(el, 'zoomed');
+			$('g').addClass('zoomed');
 		}
 		else
 		{
-			JAK.DOM.removeClass(el, 'zoomed');
+			$('g').removeClass('zoomed');
 		}
+	}
+	
+	if (e.type == "map-redraw")
+	{
+		// Add event listener
+		$('g polyline').on('click', function(event) {
+			$(this).css('stroke-width', '10px');
+		});
 	}
 };
 
@@ -105,8 +111,6 @@ GPXRequest = function()
 	// Set callback
 	xhr.setCallback(function (xmlData) {
 		var gpx = new SMap.Layer.GPX(xmlData, null, { maxPoints:5000, colors:["rgba(255, 0, 0, 0.75)", "rgba(0, 255, 0, 0.75)"] });
-		// Store information about gpx ID
-		gpxId = gpx._id;
 		
 		map.addLayer(gpx);
 		// Hide loader
@@ -115,7 +119,7 @@ GPXRequest = function()
 		//JAK.DOM.removeClass(JAK.gel("map"), "hidden");
 		gpx.enable();
 		gpx.fit();
-
+		
 		// Markers and Cards
 		DataRequest();
 	});

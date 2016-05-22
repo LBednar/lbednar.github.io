@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Timeline</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<script
+			  src="https://code.jquery.com/jquery-2.2.3.min.js"
+			  integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+			  crossorigin="anonymous">
+		</script>
+		<style>
+li {
+  display: inline;
+}
+
+
+.red {
+  background-color: #f00;
+}
+
+.green {
+  background-color: #0f0;
+}
+
+
+
+
+
+
+
+
+.li-content {
+	width: 60px;
+	float: left;
+	display: block;
+	/*display: inline-block;*/
+}
+
+.line {
+	height: 2px;
+	text-align: center;	
+	background-color: #f00; 
+}
+
+.point-container {
+	height: 30px;
+}
+
+.point {
+	margin: auto;
+	position: relative;
+	z-index: 2;
+}
+
+.point {
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	top: -6px;
+}
+
+.point-normal {
+	width: 14px;
+	height: 14px;
+	border-radius: 7px;
+	top: -8px;
+}
+
+.point-big {
+	width: 18px;
+	height: 18px;
+	border-radius: 9px;
+	top: -10px;
+}
+
+.point-start {
+	background-color: #0f0;
+}
+
+.point-end {
+	background-color: #f00;
+}
+
+.point-record {
+	background-color: #00f;
+}
+
+.date {
+	width: 50px;
+	font-size: 10px;
+	-ms-transform: rotate(-40deg);
+    -webkit-transform: rotate(-40deg);
+    transform: rotate(-40deg);
+}
+
+.data {
+	display: none;
+}
+
+.clearfix:after {
+   content: " "; 
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+		</style>
+	</head>
+	<body>
+		<div id="content">
+			<ul class="clearfix">
+				<li>
+					<div class="li-content" class="clearfix">
+						<div class="line">
+						</div>
+						<div class="point-container">
+							<div class="point point-normal point-start">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-18
+						</div>
+						<div class="data">
+							Toto je text;
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="li-content" style="width: 60px;">
+						<div class="line">
+
+						</div>
+						<div class="point-container">
+							<div class="point point-normal point-record">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-19
+						</div>
+						<div class="data">
+							Toto je text;
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="li-content" class="clearfix">
+						<div class="line">
+						</div>
+						<div class="point-container">
+							<div class="point point-small red">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-20
+						</div>
+						<div class="data">
+							Toto je text;
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="li-content" class="clearfix">
+						<div class="line">
+						</div>
+						<div class="point-container">
+							<div class="point point-normal point-record">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-21
+						</div>
+						<div class="data">
+							Toto je text;
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="li-content" class="clearfix">
+						<div class="line">
+						</div>
+						<div class="point-container">
+							<div class="point point-small red">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-22
+						</div>
+						<div class="data">
+							Toto je text;
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="li-content" class="clearfix">
+						<div class="line">
+						</div>
+						<div class="point-container">
+							<div class="point point-small red">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-23
+						</div>
+						<div class="data">
+							Toto je text;
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="li-content" class="clearfix">
+						<div class="line">
+						</div>
+						<div class="point-container">
+							<div class="point point-normal point-record">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-24
+						</div>
+						<div class="data">
+							Toto je text dalsi;
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="li-content" class="clearfix">
+						<div class="line">
+						</div>
+						<div class="point-container">
+							<div class="point point-small red">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-25
+						</div>
+						<div class="data">
+							Toto je text;
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="li-content" class="clearfix">
+						<div class="line">
+						</div>
+						<div class="point-container">
+							<div class="point point-small red">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-26
+						</div>
+						<div class="data">
+							Toto je text;
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="li-content" class="clearfix">
+						<div class="line">
+						</div>
+						<div class="point-container">
+							<div class="point point-normal point-end">
+							</div>
+						</div>
+						<div class="date">
+							2016-05-27
+						</div>
+						<div class="data">
+							Toto je text;
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		
+		<script type="text/javascript">		
+			$(" .point-record").on("click", function () {
+				var text = $(this).parent().parent().find(".data").html();
+				alert($.trim(text));
+			});
+		</script>
+	</body>
+</html>

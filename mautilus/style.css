@@ -1,0 +1,22 @@
+#board {
+    float: left;
+}
+
+#status {
+    text-align: center;
+}
+
+#board {
+    background-color: #eee;
+}
+
+.letter {
+    opacity: 1;
+    z-index: 100;
+    position: absolute;
+    background-color: #f00;
+}
+
+#board {
+    border-bottom: solid 2px #000;
+}
